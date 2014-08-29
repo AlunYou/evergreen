@@ -2,6 +2,11 @@
 <script type="text/javascript" src="<%= url("/jasmine/jasmine-html.js") %>"></script>
 <script type="text/javascript" src="<%= url("/resources/json2.js") %>"></script>
 <script type="text/javascript" src="<%= url("/resources/run.js") %>"></script>
+
+<script type="text/javascript" src="<%= url("/resources/require.js") %>"></script>
+<script type="text/javascript" src="<%= url("/resources/jsTestDriverRequireJsConfig.js") %>"></script>
+<!--<script type="text/javascript" src="<%= url("/resources/jasmine.js") %>"></script>
+<script type="text/javascript" src="<%= url("/resources/JasmineAdapter.js") %>"></script>-->
 <script type="text/javascript">
   // <![CDATA[
       <% @suite.helpers.each do |helper| %>
@@ -9,7 +14,7 @@
       <% end %>
 
       <% if @spec %>
-        <%= render_spec(@spec) %>
+        <%= render_spec(@spec).gsub(/^(\s*)require(\s*)\((\s*)\[/, "define(\"spec_test\",[") %>
       <% else %>
         <% @suite.specs.each do |spec| %>
           describe("<%= spec.name %>", function() {
@@ -18,6 +23,16 @@
         <% end %>
       <% end %>
   // ]]>
+
+  require(["spec_test"], function(spec_test){
+    var jasmineExecute = function() {
+        var jasmineEnv = jasmine.getEnv();
+        jasmineEnv.addReporter(new jasmine.TrivialReporter());
+        jasmineEnv.addReporter(new Evergreen.ReflectiveReporter());
+        jasmineEnv.execute();
+    };
+    jasmineExecute();
+});
 </script>
 
 <div id="page">
@@ -41,10 +56,10 @@
         jasmineEnv.execute();
       };
       if (window.addEventListener) {
-        window.addEventListener("load", jasmineExecute, false);
+        //window.addEventListener("load", jasmineExecute, false);
       }
       else {
-        window.attachEvent("onload", jasmineExecute);
+        //window.attachEvent("onload", jasmineExecute);
       }
     })();
   // ]]>
