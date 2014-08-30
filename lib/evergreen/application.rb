@@ -35,6 +35,13 @@ module Evergreen
       send_file File.expand_path(File.join('../jasmine/lib/jasmine-core', path), File.dirname(__FILE__))
     end
 
+    get "/resources/require.js" do
+      send_file File.join(Evergreen.root, Evergreen.require_js_path)
+    end
+    get "/resources/require_js_config.js" do
+      send_file File.join(Evergreen.root, Evergreen.require_js_config_path)
+    end
+
     get "/resources/*" do |path|
       send_file File.expand_path(File.join('resources', path), File.dirname(__FILE__))
     end

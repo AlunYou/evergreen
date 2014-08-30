@@ -17,7 +17,8 @@ module Evergreen
   autoload :Helper, 'evergreen/helper'
 
   class << self
-    attr_accessor :driver, :root, :application, :public_dir, :spec_dir, :template_dir, :helper_dir, :mounted_at
+    attr_accessor :driver, :root, :application, :public_dir, :spec_dir, :template_dir, :helper_dir, :mounted_at,
+                  :require_js_path, :require_js_config_path
 
     def configure
       yield self
@@ -31,7 +32,10 @@ module Evergreen
         config.spec_dir     = 'spec/javascripts'
         config.template_dir = 'spec/javascripts/templates'
         config.helper_dir   = 'spec/javascripts/helpers'
-        config.mounted_at   = ""
+        config.mounted_at   = ''
+
+        config.require_js_path = ''
+        config.require_js_config_path = ''
       end
     end
   end

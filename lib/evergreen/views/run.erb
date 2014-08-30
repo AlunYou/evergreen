@@ -3,28 +3,31 @@
 <script type="text/javascript" src="<%= url("/resources/json2.js") %>"></script>
 <script type="text/javascript" src="<%= url("/resources/run.js") %>"></script>
 
+<script type="text/javascript" src="/resources/require.js"></script>
+<script type="text/javascript" src="/resources/require_js_config.js"></script>
+
+<!--
 <script type="text/javascript" src="<%= url("/resources/require.js") %>"></script>
 <script type="text/javascript" src="<%= url("/resources/jsTestDriverRequireJsConfig.js") %>"></script>
-<!--<script type="text/javascript" src="<%= url("/resources/jasmine.js") %>"></script>
-<script type="text/javascript" src="<%= url("/resources/JasmineAdapter.js") %>"></script>-->
+-->
 <script type="text/javascript">
   // <![CDATA[
       <% @suite.helpers.each do |helper| %>
-        <%= render_spec(helper) %>;
+        <%= render_spec(helper).gsub(/^(\s*)require(\s*)\((\s*)\[/, "define(\"spec_test_123\",[") %>;
       <% end %>
 
       <% if @spec %>
-        <%= render_spec(@spec).gsub(/^(\s*)require(\s*)\((\s*)\[/, "define(\"spec_test\",[") %>
+        <%= render_spec(@spec).gsub(/^(\s*)require(\s*)\((\s*)\[/, "define(\"spec_test_123\",[") %>
       <% else %>
         <% @suite.specs.each do |spec| %>
           describe("<%= spec.name %>", function() {
-            <%= render_spec(spec) %>;
+            <%= render_spec(spec).gsub(/^(\s*)require(\s*)\((\s*)\[/, "define(\"spec_test_123\",[") %>;
           });
         <% end %>
       <% end %>
   // ]]>
 
-  require(["spec_test"], function(spec_test){
+  require(["spec_test_123"], function(spec_test){
     var jasmineExecute = function() {
         var jasmineEnv = jasmine.getEnv();
         jasmineEnv.addReporter(new jasmine.TrivialReporter());
