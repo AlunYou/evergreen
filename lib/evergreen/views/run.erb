@@ -13,21 +13,29 @@
 <script type="text/javascript">
   // <![CDATA[
       <% @suite.helpers.each do |helper| %>
-        <%= render_spec(helper).gsub(/^(\s*)require(\s*)\((\s*)\[/, "define(\"spec_test_123\",[") %>;
+        <%= render_spec(helper, self.get_file_index) %>;
       <% end %>
 
       <% if @spec %>
-        <%= render_spec(@spec).gsub(/^(\s*)require(\s*)\((\s*)\[/, "define(\"spec_test_123\",[") %>
+        <%= render_spec(@spec, self.get_file_index) %>
       <% else %>
         <% @suite.specs.each do |spec| %>
           describe("<%= spec.name %>", function() {
-            <%= render_spec(spec).gsub(/^(\s*)require(\s*)\((\s*)\[/, "define(\"spec_test_123\",[") %>;
+            <%= render_spec(spec, self.get_file_index) %>;
           });
         <% end %>
       <% end %>
   // ]]>
 
-  require(["spec_test_123"], function(spec_test){
+  require([
+          <%count=self.get_file_index;Array.new(count) {|i| i }.each do |index|%>
+            "spec_test_<%=index%>"
+            <% if index < count-1 %>
+                ,
+            <% end %>
+          <% end %>
+          ],
+          function(){
     var jasmineExecute = function() {
         var jasmineEnv = jasmine.getEnv();
         jasmineEnv.addReporter(new jasmine.TrivialReporter());

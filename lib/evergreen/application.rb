@@ -3,16 +3,27 @@ module Evergreen
     set :static, false
     set :root, File.expand_path('.', File.dirname(__FILE__))
 
+    def initialize
+      super
+      @file_index = 0
+    end
+
     helpers do
       def url(path)
         Evergreen.mounted_at.to_s + path.to_s
       end
 
-      def render_spec(spec)
-        spec.read if spec
+      def render_spec(spec, file_index)
+        content = spec.read if spec
+        content.gsub(/^(\s*)require(\s*)\((\s*)\[/, "define(\"spec_test_#{file_index}\",[")
       rescue StandardError => error
         erb :_spec_error, :locals => { :error => error }
       end
+    end
+
+    def get_file_index
+      @file_index = @file_index + 1
+      @file_index - 1
     end
 
     get '/' do
