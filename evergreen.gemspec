@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.email = ["jonas.nicklas@gmail.com", "abe.petrillo@gmail.com"]
   s.description = "Run Jasmine JavaScript unit tests, integrate them into Ruby applications."
 
-  s.files = Dir.glob("{bin,lib,spec,config}/**/*") + %w(README.rdoc)
+  s.files = (Dir.glob("{bin,lib,spec,config}/**/*") + %w(README.rdoc)) - ['lib/jasmine/pages/jasmine']
   s.extra_rdoc_files = ["README.rdoc"]
   s.executables = ['evergreen']
 
